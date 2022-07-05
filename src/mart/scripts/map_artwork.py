@@ -5,9 +5,6 @@ import matplotlib.colors as colors
 from matplotlib.lines import Line2D
 from PIL import Image, ImageOps, ImageColor, ImageFont, ImageDraw
 
-# import networkx as nx
-# import requests
-
 
 @click.command()
 @click.option(
@@ -72,8 +69,10 @@ def map_art(
     # markersize = 16
     # fontsize = 16
 
+    img_name = f"{city_state.split(',')[0]}.png"
+
     fig.savefig(
-        "Greensboro.png",
+        f"../output/{img_name}",
         dpi=300,
         bbox_inches="tight",
         format="png",
@@ -82,24 +81,22 @@ def map_art(
     )
 
     # Adding Border to Map
-    in_img = "Greensboro.png"
-
     # Output Image
-    _add_border(in_img, output_image="Greensboro.png", fill=border_color, bottom=400)
+    _add_border(img_name, output_image=img_name, fill=border_color, bottom=400)
 
     # Adding City text to map
-    img = Image.open("Greensboro.png")
-    draw = ImageDraw.Draw(img)
-    font = ImageFont.truetype(
-        "/Users/michaelellis/Downloads/pmingliu/PMINGLIU.ttf", 100
+    img = Image.open(
+        f"../output/{img_name}",
     )
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.truetype("../font/pmingliu/PMINGLIU.ttf", 100)
 
     # Add the font to the border
     # May need to adjust the position currently (180, 1475),
     # and the font size currently (105, 105, 105) to fit the border
-    draw.text((180, 1475), "GREENSBORO, NORTH CAROLINA", (105, 105, 105), font=font)
+    draw.text((180, 1475), city_state.upper(), (105, 105, 105), font=font)
 
-    img.save("Greensboro.png")
+    img.save(img_name)
 
 
 def _color(color, mode):
@@ -162,8 +159,8 @@ def _add_border(
     if top == None:
         top = 0
 
-    img = Image.open(input_image)
+    img = Image.open(f"../output/{input_image}")
     border_image = _expand(
         img, bottom=bottom, left=left, right=right, top=top, fill=fill
     )
-    border_image.save(output_image)
+    border_image.save(f"../output/{output_image}")
