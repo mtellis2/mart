@@ -1,6 +1,9 @@
 import click
+import logging
 
 from .map_artwork import map_art
+
+logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
 
 @click.group()
